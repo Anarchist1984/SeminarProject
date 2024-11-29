@@ -6,7 +6,7 @@ from rdkit.Chem import PandasTools
 from chembl_webresource_client.new_client import new_client
 
 
-class UniProtDataProcessor:
+class ChemBLDataProcessor:
     def __init__(self, uniprot_id):
         self.uniprot_id = uniprot_id
         self.targets_api = new_client.target
@@ -65,7 +65,7 @@ class UniProtDataProcessor:
         df["pIC50"] = df["IC50"].apply(convert_ic50_to_pic50)
         return df
 
-    def process_data(self):
+    def request_similar_compounds(self):
         """Main method to fetch and process data for the UniProt ID."""
         chembl_id = self.fetch_target_chembl_id()
         print(f"Target ChEMBL ID: {chembl_id}")
@@ -83,10 +83,3 @@ class UniProtDataProcessor:
         output_df.sort_values(by="pIC50", ascending=False, inplace=True)
         output_df.reset_index(drop=True, inplace=True)
         return output_df
-
-
-# Example usage
-uniprot_id = "P14780"
-processor = UniProtDataProcessor(uniprot_id)
-processed_data = processor.process_data()
-processed_data.head()
